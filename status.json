@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-11-20T19:16:35+00:00",
+  "generated_at": "2026-11-20T20:21:10+00:00",
   "product": {
     "name": "Vintage Alhambra Bracelet, 5 Motifs",
     "ref": "VCARD34700",
@@ -12,15 +12,15 @@
     "state": "active",
     "message": "监控运行正常",
     "interval_minutes": 60,
-    "stale_after": "2026-11-20T21:46:35+00:00",
+    "stale_after": "2026-11-20T22:51:10+00:00",
     "consecutive_unknown": 0,
-    "last_ok_check_at": "2026-11-20T19:16:35+00:00",
+    "last_ok_check_at": "2026-11-20T20:21:10+00:00",
     "health_alert_active": false
   },
   "stock": {
     "status": "UNAVAILABLE",
     "label": "Unavailable",
-    "checked_at": "2026-11-20T19:16:35+00:00",
+    "checked_at": "2026-11-20T20:21:10+00:00",
     "evidence": [
       "productinfo=无货",
       "jsonld=无货",
