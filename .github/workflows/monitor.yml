@@ -1,0 +1,136 @@
+name: VCA stock monitor
+
+on:
+  schedule:
+    # Hourly at minute 17 (off the top of the hour, where GitHub delays most).
+    # GitHub may delay or occasionally skip scheduled runs.
+    - cron: "17 * * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "check = run a stock check now; test-email = send a test email"
+        type: choice
+        options: [check, test-email]
+        default: check
+
+permissions:
+  contents: write   # push state/status to the monitor-data branch
+  actions: write    # keep the scheduled workflow enabled (see last step)
+
+# Never run two monitors at once. Queued runs wait instead of being cancelled.
+concurrency:
+  group: vca-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Non-secret settings: Settings → Secrets and variables → Actions → Variables
+      CHECK_INTERVAL_MINUTES: ${{ vars.CHECK_INTERVAL_MINUTES || '60' }}
+      MONITOR_PAUSED: ${{ vars.MONITOR_PAUSED || 'false' }}
+      VERIFY_CART: ${{ vars.VERIFY_CART || 'true' }}
+      NOTIFY_POSSIBLY: ${{ vars.NOTIFY_POSSIBLY || 'true' }}
+      POSSIBLY_MAX_EMAILS: ${{ vars.POSSIBLY_MAX_EMAILS || '6' }}
+      HEALTH_ALERT_AFTER: ${{ vars.HEALTH_ALERT_AFTER || '3' }}
+      HEALTH_REMIND_HOURS: ${{ vars.HEALTH_REMIND_HOURS || '24' }}
+      # Secrets: Settings → Secrets and variables → Actions → Secrets
+      SMTP_HOST: ${{ secrets.SMTP_HOST }}
+      SMTP_PORT: ${{ secrets.SMTP_PORT }}
+      SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      SMTP_FROM: ${{ secrets.SMTP_FROM }}
+      NOTIFY_TO: ${{ secrets.NOTIFY_TO }}
+      # Optional dead-man's switch (e.g. healthchecks.io). Alerts you if runs stop.
+      HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
+      MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'check' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install monitor
+        run: pip install -q -e .
+
+      - name: Install Chromium
+        if: env.MODE == 'check' && env.MONITOR_PAUSED != 'true'
+        run: python -m playwright install --with-deps chromium
+
+      - name: Check out monitor-data branch
+        run: scripts/prepare_data_branch.sh
+
+      - name: Email configuration (no values printed)
+        run: python -m monitor.notifier --check-config || echo "::warning::Email is not fully configured – no restock email can be sent"
+
+      - name: Check stock
+        # Exit codes: 0 ok (a single UNKNOWN is only a warning), 1 state not saved,
+        # 2 restock email failed, 3 monitor unhealthy (repeated UNKNOWN; at most
+        # once per HEALTH_REMIND_HOURS). Any non-zero turns the run red.
+        if: env.MODE == 'check'
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          FORCE=""
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then FORCE="--force"; fi
+          python -m monitor.run --data-dir data --git $FORCE --result-out check-result.json
+
+      - name: Send test email
+        if: env.MODE == 'test-email'
+        run: python -m monitor.run --data-dir data --git --test-email
+
+      - name: Show result
+        if: always() && env.MODE == 'check'
+        run: |
+          if [ -f check-result.json ]; then
+            python - <<'PY'
+          import json
+          r = json.load(open("check-result.json"))
+          lines = [f"### VCA check: **{r['status']}**", "", *[f"- {e}" for e in r["evidence"]]]
+          s = r["signals"]
+          lines += ["", f"HTTP {s.get('http_status')} · challenge={s.get('challenge')} "
+                        f"({s.get('challenge_reason')}) · HUMAN preloaded={s.get('human_preloaded')} · "
+                        f"strength={r.get('strength')} · unknown_kind={r.get('unknown_kind')} · error={s.get('error')}"]
+          try:
+              st = json.load(open("data/status.json"))
+              m = st["monitoring"]
+              lines += [f"Monitor: **{m['state']}** – {m['message']} (consecutive UNKNOWN: {m.get('consecutive_unknown')})"]
+          except Exception:
+              pass
+          open(__import__('os').environ["GITHUB_STEP_SUMMARY"], "a").write("\n".join(lines) + "\n")
+          print("\n".join(lines))
+          PY
+          else
+            echo "No check this run (skipped by interval or paused)."
+          fi
+
+      - name: Upload raw check result (no secrets inside)
+        if: always() && hashFiles('check-result.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-result-${{ github.run_id }}
+          path: check-result.json
+          retention-days: 7
+
+      - name: Keep schedule alive (best effort)
+        # GitHub disables cron workflows in public repos after 60 days without
+        # repository activity. Re-enabling via the API is a widely used
+        # workaround but is NOT documented to reset that timer, so it is only one
+        # layer: GitHub also emails a warning before disabling, the website marks
+        # data stale after ~2.5 h, and HEALTHCHECK_URL (if set) alerts when runs stop.
+        if: always() && github.event_name == 'schedule'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          state=$(gh api "repos/$REPO/actions/workflows/monitor.yml" --jq .state || echo "unknown")
+          echo "workflow state: $state"
+          if gh api -X PUT "repos/$REPO/actions/workflows/monitor.yml/enable" >/dev/null; then
+            echo "enable call accepted"
+          else
+            echo "::warning::Could not call the workflow enable API – check that the schedule is still active"
+          fi
