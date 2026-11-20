@@ -1,0 +1,31 @@
+{
+  "email": {
+    "last_error": null,
+    "last_error_at": null,
+    "last_kind": null,
+    "last_sent_at": null,
+    "last_test_error_at": null,
+    "last_test_ok_at": "2026-11-20T04:53:30+00:00"
+  },
+  "episode": {
+    "available_sent_at": null,
+    "first_seen_at": null,
+    "last_positive": null,
+    "possibly_sent": [],
+    "possibly_strength": null
+  },
+  "health": {
+    "alert_active": false,
+    "alert_sent_at": null,
+    "consecutive_unknown": 0,
+    "first_unknown_at": null,
+    "last_kind": null,
+    "last_reason": null
+  },
+  "last_check_at": null,
+  "last_evidence": [],
+  "last_ok_check_at": null,
+  "last_status": null,
+  "pending": {},
+  "schema": 2
+}
