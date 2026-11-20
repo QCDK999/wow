@@ -1,0 +1,20 @@
+[project]
+name = "vca-stock-monitor"
+version = "1.0.0"
+description = "Monitors whether a Van Cleef & Arpels bracelet can be bought online on the US site"
+requires-python = ">=3.11"
+dependencies = ["playwright>=1.48"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pyyaml>=6"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["browser: runs headless Chromium against local fixtures (no internet)"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["monitor"]

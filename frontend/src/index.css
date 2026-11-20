@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ivory: #faf8f3;
+  --color-ink: #2b2a28;
+  --color-line: #ebe5d8;
+  --color-gold: #b8975a;
+  --color-gold-deep: #8a6d3b;
+  --font-serif: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+}
