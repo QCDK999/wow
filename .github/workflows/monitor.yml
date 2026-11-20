@@ -61,7 +61,7 @@ jobs:
         run: python -m playwright install --with-deps chromium
 
       - name: Check out monitor-data branch
-        run: scripts/prepare_data_branch.sh
+        run: bash scripts/prepare_data_branch.sh
 
       - name: Email configuration (no values printed)
         run: python -m monitor.notifier --check-config || echo "::warning::Email is not fully configured – no restock email can be sent"
