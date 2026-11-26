@@ -22,7 +22,7 @@
     "last_kind": null,
     "last_reason": null
   },
-  "last_check_at": "2026-11-26T01:34:43+00:00",
+  "last_check_at": "2026-11-26T03:13:46+00:00",
   "last_evidence": [
     "productinfo=无货",
     "jsonld=无货",
@@ -30,7 +30,7 @@
     "button=无货",
     "datalayer=无货"
   ],
-  "last_ok_check_at": "2026-11-26T01:34:43+00:00",
+  "last_ok_check_at": "2026-11-26T03:13:46+00:00",
   "last_status": "UNAVAILABLE",
   "pending": {},
   "schema": 2
