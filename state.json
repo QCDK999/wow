@@ -9,8 +9,20 @@
   },
   "episode": {
     "available_sent_at": null,
-    "first_seen_at": null,
-    "last_positive": null,
+    "first_seen_at": "2026-11-27T18:04:07+00:00",
+    "last_positive": {
+      "at": "2026-11-27T18:04:07+00:00",
+      "evidence": [
+        "productinfo=有货",
+        "jsonld=无货",
+        "cta=有货",
+        "button=有货",
+        "datalayer=无货",
+        "信号不一致或不完整，需人工确认"
+      ],
+      "status": "POSSIBLY_AVAILABLE",
+      "strength": "weak"
+    },
     "possibly_sent": [],
     "possibly_strength": null
   },
@@ -22,16 +34,22 @@
     "last_kind": null,
     "last_reason": null
   },
-  "last_check_at": "2026-11-27T16:22:00+00:00",
+  "last_check_at": "2026-11-27T18:04:07+00:00",
   "last_evidence": [
-    "productinfo=无货",
+    "productinfo=有货",
     "jsonld=无货",
-    "cta=无货",
-    "button=无货",
-    "datalayer=无货"
+    "cta=有货",
+    "button=有货",
+    "datalayer=无货",
+    "信号不一致或不完整，需人工确认"
   ],
-  "last_ok_check_at": "2026-11-27T16:22:00+00:00",
-  "last_status": "UNAVAILABLE",
-  "pending": {},
+  "last_ok_check_at": "2026-11-27T18:04:07+00:00",
+  "last_status": "POSSIBLY_AVAILABLE",
+  "pending": {
+    "POSSIBLY_AVAILABLE": {
+      "claimed_at": "2026-11-27T18:04:07+00:00",
+      "run_id": "46046552922"
+    }
+  },
   "schema": 2
 }
