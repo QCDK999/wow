@@ -2,8 +2,8 @@
   "email": {
     "last_error": null,
     "last_error_at": null,
-    "last_kind": null,
-    "last_sent_at": null,
+    "last_kind": "POSSIBLY_AVAILABLE",
+    "last_sent_at": "2026-11-27T18:04:09+00:00",
     "last_test_error_at": null,
     "last_test_ok_at": "2026-11-20T04:53:30+00:00"
   },
@@ -23,8 +23,10 @@
       "status": "POSSIBLY_AVAILABLE",
       "strength": "weak"
     },
-    "possibly_sent": [],
-    "possibly_strength": null
+    "possibly_sent": [
+      "2026-11-27T18:04:09+00:00"
+    ],
+    "possibly_strength": "weak"
   },
   "health": {
     "alert_active": false,
@@ -45,11 +47,6 @@
   ],
   "last_ok_check_at": "2026-11-27T18:04:07+00:00",
   "last_status": "POSSIBLY_AVAILABLE",
-  "pending": {
-    "POSSIBLY_AVAILABLE": {
-      "claimed_at": "2026-11-27T18:04:07+00:00",
-      "run_id": "46046552922"
-    }
-  },
+  "pending": {},
   "schema": 2
 }
