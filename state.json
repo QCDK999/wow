@@ -3,7 +3,7 @@
     "last_error": null,
     "last_error_at": null,
     "last_kind": "POSSIBLY_AVAILABLE",
-    "last_sent_at": "2026-11-27T20:13:54+00:00",
+    "last_sent_at": "2026-11-28T03:08:35+00:00",
     "last_test_error_at": null,
     "last_test_ok_at": "2026-11-20T04:53:30+00:00"
   },
@@ -25,7 +25,8 @@
     },
     "possibly_sent": [
       "2026-11-27T18:04:09+00:00",
-      "2026-11-27T20:13:54+00:00"
+      "2026-11-27T20:13:54+00:00",
+      "2026-11-28T03:08:35+00:00"
     ],
     "possibly_strength": "weak"
   },
@@ -48,11 +49,6 @@
   ],
   "last_ok_check_at": "2026-11-28T03:08:33+00:00",
   "last_status": "POSSIBLY_AVAILABLE",
-  "pending": {
-    "POSSIBLY_AVAILABLE": {
-      "claimed_at": "2026-11-28T03:08:33+00:00",
-      "run_id": "46101330630"
-    }
-  },
+  "pending": {},
   "schema": 2
 }
