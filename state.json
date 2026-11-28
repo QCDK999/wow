@@ -11,7 +11,7 @@
     "available_sent_at": null,
     "first_seen_at": "2026-11-27T18:04:07+00:00",
     "last_positive": {
-      "at": "2026-11-28T05:17:25+00:00",
+      "at": "2026-11-28T06:20:51+00:00",
       "evidence": [
         "productinfo=有货",
         "jsonld=无货",
@@ -38,7 +38,7 @@
     "last_kind": null,
     "last_reason": null
   },
-  "last_check_at": "2026-11-28T05:17:25+00:00",
+  "last_check_at": "2026-11-28T06:20:51+00:00",
   "last_evidence": [
     "productinfo=有货",
     "jsonld=无货",
@@ -47,7 +47,7 @@
     "datalayer=无货",
     "信号不一致或不完整，需人工确认"
   ],
-  "last_ok_check_at": "2026-11-28T05:17:25+00:00",
+  "last_ok_check_at": "2026-11-28T06:20:51+00:00",
   "last_status": "POSSIBLY_AVAILABLE",
   "pending": {},
   "schema": 2
